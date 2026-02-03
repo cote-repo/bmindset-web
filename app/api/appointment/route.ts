@@ -38,6 +38,7 @@ export async function POST(request: Request) {
         : {}),
     });
 
+    
     await transporter.verify();
 
     // Email to the company
