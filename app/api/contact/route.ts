@@ -13,23 +13,28 @@ export async function POST(request: Request) {
     }
 
     const transporter = nodemailer.createTransport({
-      host: "mail.bmindsets.com",
-      port: 465,
-      secure: true,
+      host: process.env.SMTP_HOST ?? "smtp.gmail.com",
+      port: Number(process.env.SMTP_PORT ?? 587),
+      secure: (process.env.SMTP_SECURE ?? "false") === "true",
       auth: {
-        user: "info@bmindsets.com",
-        pass: "!Y0KA*h=A)CZKeT,",
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD,
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
+      ...(process.env.SMTP_TLS_REJECT_UNAUTHORIZED
+        ? {
+            tls: {
+              rejectUnauthorized:
+                process.env.SMTP_TLS_REJECT_UNAUTHORIZED !== "false",
+            },
+          }
+        : {}),
     });
 
     await transporter.verify();
 
     const mailOptions = {
-      from: "info@bmindsets.com",
-      to: "info@bmindsets.com",
+      from: process.env.SMTP_EMAIL,
+      to: process.env.CONTACT_TO_EMAIL ?? "info@bmindsets.com",
       replyTo: email,
       subject: `New Inquiry from ${name}${company ? ` - ${company}` : ""}`,
       html: `
