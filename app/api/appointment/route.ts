@@ -21,29 +21,24 @@ export async function POST(request: Request) {
     });
 
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST ?? "smtp.gmail.com",
-      port: Number(process.env.SMTP_PORT ?? 587),
-      secure: (process.env.SMTP_SECURE ?? "false") === "true",
+      host: "mail.bmindsets.com",
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASSWORD,
+        user: "info@bmindsets.com",
+        pass: "!Y0KA*h=A)CZKeT,",
       },
-      ...(process.env.SMTP_TLS_REJECT_UNAUTHORIZED
-        ? {
-            tls: {
-              rejectUnauthorized:
-                process.env.SMTP_TLS_REJECT_UNAUTHORIZED !== "false",
-            },
-          }
-        : {}),
+      tls: {
+        rejectUnauthorized: false,
+      },
     });
 
     await transporter.verify();
 
     // Email to the company
     const companyMailOptions = {
-      from: process.env.SMTP_EMAIL,
-      to: process.env.APPOINTMENT_TO_EMAIL ?? "info@bmindsets.com",
+      from: "info@bmindsets.com",
+      to: "machhindranath@bmindsets.com",
       replyTo: email,
       subject: `New Appointment Request - ${name} on ${formattedDate}`,
       html: `
@@ -76,7 +71,7 @@ export async function POST(request: Request) {
 
     // Confirmation email to the customer
     const customerMailOptions = {
-      from: process.env.SMTP_EMAIL,
+      from: "info@bmindsets.com",
       to: email,
       subject: `Appointment Confirmed - BMINDSET TECHNOLOGY`,
       html: `
