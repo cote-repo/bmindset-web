@@ -11,6 +11,7 @@ import { BookCTA } from "@/components/book-cta";
 import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
 
+
 export default function Home() {
   return (
     <main className="min-h-screen">
